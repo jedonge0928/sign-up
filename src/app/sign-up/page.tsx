@@ -1,6 +1,7 @@
 "use client";
 import { ISignUpForm } from "@/domains/auth/modals/auth.types";
 import Step1InputEmail from "@/pages/sign-up/components/step1-input-email";
+import Step1InputName from "@/pages/sign-up/components/step2-input-name";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -8,6 +9,9 @@ import { useForm } from "react-hook-form";
 export default function SignUp() {
   const [step, setStep] = useState<number>(1);
   const [isEmailCodeInput, setIsEmailCodeInput] = useState(false);
+  const [isNameInput, setIsNameInput] = useState(false);
+  const [isPasswordInput, setIspasswordInput] = useState(false);
+  const [isPassword2Input, setIsPassword2Input] = useState(false);
   const { watch, register } = useForm<ISignUpForm>();
 
   const postEmail = async (email: string) => {
@@ -31,26 +35,41 @@ export default function SignUp() {
   console.log(watch("email"), "email");
 
   return (
-    <div className="bg-black h-screen p-4 flex flex-col">
-      <div className="flex gap-2 py-10">
-        {[1, 2, 3, 4].map((_step) => (
-          <div
-            key={_step}
-            className={`py-1  flex-1 ${
-              step >= _step ? "bg-red-500" : "bg-gray-500"
-            }`}
-          ></div>
-        ))}
+    <div className="bg-black flex justify-center">
+      <div className="bg-black h-screen p-4 flex flex-col w-[700px]">
+        <div className="flex gap-2 py-10">
+          {[1, 2, 3, 4].map((_step) => (
+            <div
+              key={_step}
+              className={`py-1  flex-1 ${
+                step >= _step ? "bg-[#FF5126]" : "bg-gray-500"
+              }`}
+            ></div>
+          ))}
+        </div>
+        {step === 1 && (
+          <Step1InputEmail
+            isEmailCodeInput={isEmailCodeInput}
+            register={register}
+            setIsEmailCodeInput={setIsEmailCodeInput}
+            setStep={setStep}
+            watch={watch}
+          />
+        )}
+        {step === 2 && (
+          <Step1InputName
+            register={register}
+            watch={watch}
+            setStep={setStep}
+            isNameInput={isNameInput}
+            setIsNameInput={setIsNameInput}
+            isPasswordInput={isPasswordInput}
+            setIsPasswordInput={setIspasswordInput}
+            isPasswordInput2={isPassword2Input}
+            setIsPassword2Input={setIsPassword2Input}
+          />
+        )}
       </div>
-      {step === 1 && (
-        <Step1InputEmail
-          isEmailCodeInput={isEmailCodeInput}
-          register={register}
-          setIsEmailCodeInput={setIsEmailCodeInput}
-          setStep={setStep}
-          watch={watch}
-        />
-      )}
     </div>
   );
 }

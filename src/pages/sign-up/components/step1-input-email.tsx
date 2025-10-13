@@ -26,7 +26,7 @@ export default function Step1InputEmail({
         </div>{" "}
         <input
           type="text"
-          className="border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
+          className={`border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white`}
           {...register("email")}
         />
         {isEmailCodeInput && (
@@ -40,25 +40,27 @@ export default function Step1InputEmail({
       <div>
         {!isEmailCodeInput && (
           <button
-            className={`text-white w-full py-4 border  ${
-              watch("email") ? "bg-red-600 cursor-pointer" : "bg-gray-600"
+            className={`text-white w-full py-4  rounded-md  ${
+              watch("email")
+                ? "bg-[#FF5126] border-[#FF5126] cursor-pointer"
+                : "bg-gray-600"
             }`}
             disabled={!watch("email")}
             onClick={() => setIsEmailCodeInput(true)}
           >
-            메일전송
+            인증 메일 전송
           </button>
         )}
 
         {isEmailCodeInput && (
           <button
-            className={`text-white w-full py-4 border  ${
-              watch("emailCode") ? "bg-red-600 cursor-pointer" : "bg-gray-600"
+            className={`text-white w-full py-4   rounded-md ${
+              watch("emailCode") ? "bg-[#FF5126] cursor-pointer" : "bg-gray-600"
             }`}
             disabled={!watch("emailCode")}
             onClick={() => setStep((prev) => prev + 1)}
           >
-            메일인증
+            메일 인증
           </button>
         )}
       </div>
