@@ -4,6 +4,7 @@ import Step1InputEmail from "@/pages/sign-up/components/step1-input-email";
 import Step1InputName from "@/pages/sign-up/components/step2-input-name";
 import StepInputProfile from "@/pages/sign-up/components/step3-input-profile";
 import StepInputCategory from "@/pages/sign-up/components/step4-input-category";
+import StepSignUpComplete from "@/pages/sign-up/components/step5-input-complete";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -105,6 +106,7 @@ export default function SignUp() {
             setIsCategorySelect={setIsCategorySelect}
           />
         )}
+        {step === 5 && <StepSignUpComplete />}
       </div>
     </div>
   );
