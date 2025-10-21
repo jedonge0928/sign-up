@@ -1,7 +1,9 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function StepSignUpComplete() {
+  const router = useRouter();
   const [rotate, setRotate] = useState(false);
 
   useEffect(() => {
@@ -13,14 +15,22 @@ export default function StepSignUpComplete() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black">
-      <img
-        src="/signup_check.svg"
-        alt="회원가입 완료"
-        className={`w-1xl transition-transform duration-1000 ${
-          rotate ? "rotate-y-[360deg]" : ""
-        }`}
-      />
-    </div>
+    <>
+      <div className="flex justify-center items-center h-screen bg-black">
+        <img
+          src="/signup_check.svg"
+          alt="회원가입 완료"
+          className={`w-1xl transition-transform duration-1000 ${
+            rotate ? "rotate-y-[360deg]" : ""
+          }`}
+        />
+      </div>
+      <button
+        className="text-white w-full py-4   rounded-md bg-[#FF5126] cursor-pointer"
+        onClick={() => router.push("/")}
+      >
+        홈으로
+      </button>
+    </>
   );
 }

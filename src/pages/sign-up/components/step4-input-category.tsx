@@ -32,9 +32,6 @@ export default function StepInputCategory({
           {...register("joinCategory")}
           defaultValue=""
         >
-          <option value="" disabled>
-            모임 카테고리를 선택해 주세요
-          </option>
           <option value="문화">문화</option>
           <option value="운동">운동</option>
           <option value="푸드">푸드</option>
