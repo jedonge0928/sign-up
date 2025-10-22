@@ -1,29 +1,18 @@
 "use client";
-import { ISignUpForm } from "@/domains/auth/modals/auth.types";
-import { Dispatch, SetStateAction, useState } from "react";
-import { UseFormRegister, UseFormWatch } from "react-hook-form";
+
+import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
+import { useState } from "react";
+
 import toast from "react-hot-toast";
 
-interface Step1InputEmailProps {
-  watch: UseFormWatch<ISignUpForm>;
-  register: UseFormRegister<ISignUpForm>;
-  setIsEmailCodeInput: Dispatch<SetStateAction<boolean>>;
-  setStep: Dispatch<SetStateAction<number>>;
-  isEmailCodeInput: boolean;
-}
-
-export default function Step1InputEmail({
-  register,
-  setIsEmailCodeInput,
-  isEmailCodeInput,
-  watch,
-  setStep,
-}: Step1InputEmailProps) {
+export default function Step1InputEmail() {
   const [emailError, setEmailError] = useState("");
   const [codeError, setCodeError] = useState("");
+  const { form, setForm, setStep, step } = useSignUpStore();
+  const [isEmailCodeInput, setIsEmailCodeInput] = useState(false);
 
   const handlePostEmailCode = async () => {
-    const email = watch("email");
+    const email = form.email || "";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
@@ -65,11 +54,7 @@ export default function Step1InputEmail({
   };
 
   const handleCompleteEmailCode = async () => {
-    const code = watch("emailCode");
-
-    const exCode = "123456";
-
-    if (code === exCode) {
+    if (form.emailCode === "123456") {
       setCodeError("");
       toast.success("이메일 인증이 완료되었습니다", {
         position: "bottom-center",
@@ -82,7 +67,7 @@ export default function Step1InputEmail({
         },
       });
 
-      setTimeout(() => setStep((prev) => prev + 1), 1000);
+      setTimeout(() => setStep(step + 1), 800);
     } else {
       setCodeError("인증번호가 올바르지 않습니다.");
     }
@@ -96,9 +81,10 @@ export default function Step1InputEmail({
           <p>메일을 입력하면 메일이 발송 돼요</p>
         </div>{" "}
         <input
+          value={form.email || ""}
+          onChange={(e) => setForm({ email: e.target.value })}
           type="text"
           className={`border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white`}
-          {...register("email")}
           placeholder="이메일을 입력해주세요"
         />{" "}
         {emailError && (
@@ -106,9 +92,10 @@ export default function Step1InputEmail({
         )}
         {isEmailCodeInput && (
           <input
+            value={form.emailCode || ""}
+            onChange={(e) => setForm({ emailCode: e.target.value })}
             type="text"
             className="border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            {...register("emailCode")}
             placeholder="인증 번호 6자리를 입력해 주세요"
           />
         )}
@@ -120,11 +107,11 @@ export default function Step1InputEmail({
         {!isEmailCodeInput && (
           <button
             className={`text-white w-full py-4  rounded-md  ${
-              watch("email")
+              form.email
                 ? "bg-[#FF5126] border-[#FF5126] cursor-pointer"
                 : "bg-gray-600"
             }`}
-            disabled={!watch("email")}
+            disabled={!form.email}
             onClick={handlePostEmailCode}
           >
             인증 메일 전송
@@ -134,9 +121,9 @@ export default function Step1InputEmail({
         {isEmailCodeInput && (
           <button
             className={`text-white w-full py-4   rounded-md ${
-              watch("emailCode") ? "bg-[#FF5126] cursor-pointer" : "bg-gray-600"
+              form.emailCode ? "bg-[#FF5126] cursor-pointer" : "bg-gray-600"
             }`}
-            disabled={!watch("emailCode")}
+            disabled={!form.emailCode}
             onClick={handleCompleteEmailCode}
           >
             메일 인증
