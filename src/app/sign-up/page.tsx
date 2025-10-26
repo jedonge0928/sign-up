@@ -1,25 +1,13 @@
 "use client";
-import { ISignUpForm } from "@/domains/auth/modals/auth.types";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import Step1InputEmail from "@/pages/sign-up/components/step1-input-email";
 import Step1InputName from "@/pages/sign-up/components/step2-input-name";
 import StepInputProfile from "@/pages/sign-up/components/step3-input-profile";
 import StepInputCategory from "@/pages/sign-up/components/step4-input-category";
 import StepSignUpComplete from "@/pages/sign-up/components/step5-input-complete";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 
 export default function SignUp() {
   const { step } = useSignUpStore();
-  //
-
-  const [isBirthInput, setIsBirthInput] = useState(false);
-  const [isGenderSelect, setIsGenderSelect] = useState(false);
-  const [isAdressInput, setisAdressInput] = useState(false);
-
-  //
-  const [isCategorySelect, setIsCategorySelect] = useState(false);
-  const { watch, register } = useForm<ISignUpForm>();
 
   return (
     <div className="bg-black flex justify-center">
@@ -39,26 +27,8 @@ export default function SignUp() {
         </div>
         {step === 1 && <Step1InputEmail />}
         {step === 2 && <Step1InputName />}
-        {step === 3 && (
-          <StepInputProfile
-            register={register}
-            watch={watch}
-            isBirthInput={isBirthInput}
-            isGenderSelect={isGenderSelect}
-            isAdressInput={isAdressInput}
-            setIsBirthInput={setIsBirthInput}
-            setIsGenderSelect={setIsGenderSelect}
-            setisAdressInput={setisAdressInput}
-          />
-        )}
-        {step === 4 && (
-          <StepInputCategory
-            register={register}
-            watch={watch}
-            isCategorySelect={isCategorySelect}
-            setIsCategorySelect={setIsCategorySelect}
-          />
-        )}
+        {step === 3 && <StepInputProfile />}
+        {step === 4 && <StepInputCategory />}
         {step === 5 && <StepSignUpComplete />}
       </div>
     </div>

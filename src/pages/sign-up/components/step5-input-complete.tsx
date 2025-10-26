@@ -1,11 +1,31 @@
 "use client";
+import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function StepSignUpComplete() {
   const router = useRouter();
   const [rotate, setRotate] = useState(false);
+  const { form, reset } = useSignUpStore();
 
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error("회원가입 실패");
+
+      alert("회원가입이 완료되었습니다!");
+      reset(); // 상태 초기화
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+      alert("회원가입 중 오류가 발생했습니다.");
+    }
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       setRotate(true);
@@ -13,6 +33,9 @@ export default function StepSignUpComplete() {
     }, 6000);
     return () => clearInterval(interval);
   }, []);
+  useEffect(() => {
+    console.log("✅ 회원가입 최종 데이터:", form);
+  }, [form]);
 
   return (
     <>

@@ -105,8 +105,13 @@ export default function StepInputProfile() {
         {isGenderSelect && (
           <select
             className="w-full border-white  bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            value={form.gender || ""}
-            onChange={(e) => setForm({ gender: e.target.value })}
+            value={form.gender}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "남성" || value === "여성") {
+                setForm({ gender: value });
+              }
+            }}
           >
             <option value="남성">남성</option>
             <option value="여성">여성</option>
