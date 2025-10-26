@@ -1,24 +1,36 @@
 "use client";
 
 import { ISignUpForm } from "@/domains/auth/modals/auth.types";
-import { Dispatch, SetStateAction } from "react";
-import { UseFormRegister, UseFormWatch } from "react-hook-form";
+import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import { usePostSignUp } from "@/domains/auth/hook/usePostSignUp";
 
-interface StepInputCategoryProps {
-  watch: UseFormWatch<ISignUpForm>;
-  register: UseFormRegister<ISignUpForm>;
-  setIsCategorySelect: Dispatch<SetStateAction<boolean>>;
-  setStep: Dispatch<SetStateAction<number>>;
-  isCategorySelect: boolean;
-}
+export default function StepInputCategory() {
+  const { step, setStep, form, setForm, reset } = useSignUpStore();
+  const [isCategorySelect, setIsCategorySelect] = useState(false);
+  const mutation = usePostSignUp();
 
-export default function StepInputCategory({
-  register,
-  watch,
-  setIsCategorySelect,
-  setStep,
-  isCategorySelect,
-}: StepInputCategoryProps) {
+  const handleSignUp = () => {
+    if (!form.email || !form.password || !form.name) {
+      toast.error("필수 정보가 누락되었습니다.");
+      return;
+    }
+
+    mutation.mutate(form as ISignUpForm, {
+      onSuccess: (data) => {
+        console.log("회원가입 성공:", data);
+        toast.success("회원가입이 완료되었습니다!");
+        reset();
+        setStep(step + 1);
+      },
+      onError: (err: any) => {
+        console.error("회원가입 실패:", err);
+        toast.error("회원가입 중 오류가 발생했습니다.");
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex-1 space-y-3">
@@ -26,12 +38,18 @@ export default function StepInputCategory({
           <h2>카테고리를 선택해 주세요</h2>
           <p>취향에 알맞는 컨텐츠를 추천해 드려요</p>
         </div>
-
         <select
           className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-          {...register("joinCategory")}
-          defaultValue=""
+          value={form.joinCategory || ""}
+          onChange={(e) =>
+            setForm({
+              joinCategory: e.target.value as ISignUpForm["joinCategory"],
+            })
+          }
         >
+          <option value="" disabled>
+            카테고리를 선택해주세요
+          </option>
           <option value="문화">문화</option>
           <option value="운동">운동</option>
           <option value="푸드">푸드</option>
@@ -44,8 +62,8 @@ export default function StepInputCategory({
         {isCategorySelect && (
           <select
             className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            {...register("wantCategory")}
-            defaultValue=""
+            value={form.wantCategory || ""}
+            onChange={(e) => setForm({ wantCategory: e.target.value })}
           >
             <option value="" disabled>
               컨텐츠 카테고리를 선택해 주세요
@@ -69,9 +87,9 @@ export default function StepInputCategory({
         {!isCategorySelect && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              watch("joinCategory") ? "bg-[#FF5126]" : "bg-gray-600"
+              form.joinCategory ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!watch("joinCategory")}
+            disabled={!form.joinCategory}
             onClick={() => setIsCategorySelect(true)}
           >
             다음
@@ -81,12 +99,12 @@ export default function StepInputCategory({
         {isCategorySelect && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              watch("wantCategory") ? "bg-[#FF5126]" : "bg-gray-600"
+              form.wantCategory ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!watch("wantCategory")}
-            onClick={() => setStep((prev) => prev + 1)}
+            disabled={!form.wantCategory}
+            onClick={handleSignUp}
           >
-            완료
+            회원가입 완료
           </button>
         )}
       </div>

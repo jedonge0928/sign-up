@@ -1,35 +1,18 @@
 "use client";
 
-import { ISignUpForm } from "@/domains/auth/modals/auth.types";
-import { Dispatch, SetStateAction, useState } from "react";
-import { UseFormRegister, UseFormWatch } from "react-hook-form";
+import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
+import { useState } from "react";
+
 import toast from "react-hot-toast";
 
-interface StepInputProfileProps {
-  watch: UseFormWatch<ISignUpForm>;
-  register: UseFormRegister<ISignUpForm>;
-  setIsBirthInput: Dispatch<SetStateAction<boolean>>;
-  setIsGenderSelect: Dispatch<SetStateAction<boolean>>;
-  setisAdressInput: Dispatch<SetStateAction<boolean>>;
-  setStep: Dispatch<SetStateAction<number>>;
-  isBirthInput: boolean;
-  isGenderSelect: boolean;
-  isAdressInput: boolean;
-}
-
-export default function StepInputProfile({
-  register,
-  watch,
-  setIsBirthInput,
-  setIsGenderSelect,
-  setisAdressInput,
-  setStep,
-  isBirthInput,
-  isGenderSelect,
-  isAdressInput,
-}: StepInputProfileProps) {
+export default function StepInputProfile() {
+  const { step, setStep, setForm, form } = useSignUpStore();
   const [birthError, setBirthError] = useState("");
   const [adressError, setAdressError] = useState("");
+
+  const [isBirthInput, setIsBirthInput] = useState(false);
+  const [isGenderSelect, setIsGenderSelect] = useState(false);
+  const [isAdressInput, setIsAdressInput] = useState(false);
 
   //toastStyle
   const toastStyle = {
@@ -41,7 +24,7 @@ export default function StepInputProfile({
   };
 
   const handleCheckBirth = () => {
-    const birth = watch("birth");
+    const birth = form.birth || "";
     const birthRegex = /^\d{8}$/;
 
     if (!birthRegex.test(birth)) {
@@ -85,7 +68,7 @@ export default function StepInputProfile({
   //주소확인
 
   const handleCheckAdress = () => {
-    const adress = watch("adress");
+    const adress = form.adress;
 
     if (!adress || adress.trim() === "") {
       setAdressError("주소를 입력해주세요");
@@ -100,7 +83,7 @@ export default function StepInputProfile({
       position: "bottom-center",
       style: toastStyle,
     });
-    setStep((prev) => prev + 1);
+    setStep(step + 1);
   };
   return (
     <>
@@ -110,10 +93,11 @@ export default function StepInputProfile({
           <p>생년월일 · 성별 · 주소를 입력해주세요</p>
         </div>
         <input
+          value={form.birth || ""}
+          onChange={(e) => setForm({ birth: e.target.value })}
           type="text"
           placeholder="생년월일 (YYYYMMDD)"
           className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-          {...register("birth")}
         />
         {birthError && (
           <p className="text-[#FF5126] text-sm mt-1 ">{birthError}</p>
@@ -121,8 +105,13 @@ export default function StepInputProfile({
         {isGenderSelect && (
           <select
             className="w-full border-white  bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            {...register("gender")}
-            defaultValue=""
+            value={form.gender}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "남성" || value === "여성") {
+                setForm({ gender: value });
+              }
+            }}
           >
             <option value="남성">남성</option>
             <option value="여성">여성</option>
@@ -131,10 +120,11 @@ export default function StepInputProfile({
 
         {isAdressInput && (
           <input
+            value={form.adress || ""}
+            onChange={(e) => setForm({ adress: e.target.value })}
             type="text"
             placeholder="주소 입력"
             className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            {...register("adress")}
           />
         )}
       </div>
@@ -143,9 +133,9 @@ export default function StepInputProfile({
         {!isGenderSelect && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              watch("birth") ? "bg-[#FF5126]" : "bg-gray-600"
+              form.birth ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!watch("birth")}
+            disabled={!form.birth}
             onClick={handleCheckBirth}
           >
             다음
@@ -155,10 +145,10 @@ export default function StepInputProfile({
         {isGenderSelect && !isAdressInput && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              watch("gender") ? "bg-[#FF5126]" : "bg-gray-600"
+              form.gender ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!watch("gender")}
-            onClick={() => setisAdressInput(true)}
+            disabled={!form.gender}
+            onClick={() => setIsAdressInput(true)}
           >
             다음
           </button>
@@ -167,9 +157,9 @@ export default function StepInputProfile({
         {isAdressInput && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              watch("adress") ? "bg-[#FF5126]" : "bg-gray-600"
+              form.adress ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!watch("adress")}
+            disabled={!form.adress}
             onClick={handleCheckAdress}
           >
             다음
