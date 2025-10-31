@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  usePostEmailCode,
+  useVerifyEmailCode,
+} from "@/app/sign-up/hook/useSignUpHook";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import { useState } from "react";
 
@@ -10,16 +14,17 @@ export default function Step1InputEmail() {
   const [codeError, setCodeError] = useState("");
   const { form, setForm, setStep, step } = useSignUpStore();
   const [isEmailCodeInput, setIsEmailCodeInput] = useState(false);
+  const { mutate, isPending } = usePostEmailCode();
+  const { mutate: verifyCodeMutate, isPending: isVerifying } =
+    useVerifyEmailCode();
 
   const handlePostEmailCode = async () => {
     const email = form.email || "";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
       setEmailError("이메일 형식이 올바르지 않습니다.");
       return;
     }
-
     try {
       toast.loading("이메일 발송 중...", {
         position: "bottom-center",
@@ -31,9 +36,7 @@ export default function Step1InputEmail() {
           marginBottom: "80px",
         },
       });
-
       await new Promise((resolve) => setTimeout(resolve, 1500));
-
       toast.dismiss();
       toast.success("인증 메일을 발송 했습니다", {
         position: "bottom-center",
@@ -52,25 +55,91 @@ export default function Step1InputEmail() {
       toast.error("메일 발송 중 오류가 발생했습니다.");
     }
   };
+  // const handlePostEmailCode = () => {
+  //   const email = form.email || "";
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleCompleteEmailCode = async () => {
-    if (form.emailCode === "123456") {
-      setCodeError("");
-      toast.success("이메일 인증이 완료되었습니다", {
-        position: "bottom-center",
-        style: {
-          width: "100%",
-          backgroundColor: "#333",
-          color: "#fff",
-          fontSize: "16px",
-          marginBottom: "80px",
-        },
-      });
+  //   if (!emailRegex.test(email)) {
+  //     setEmailError("이메일 형식이 올바르지 않습니다.");
+  //     return;
+  //   }
 
-      setTimeout(() => setStep(step + 1), 800);
-    } else {
-      setCodeError("인증번호가 올바르지 않습니다.");
+  //   mutate(
+  //     { email },
+  //     {
+  //       onSuccess: (data) => {
+  //         toast.success("인증 메일을 발송했습니다.", {
+  //           position: "bottom-center",
+  //           style: {
+  //             width: "100%",
+  //             backgroundColor: "#333",
+  //             color: "#fff",
+  //             fontSize: "16px",
+  //             marginBottom: "80px",
+  //           },
+  //         });
+  //         setIsEmailCodeInput(true);
+  //         setEmailError("");
+  //       },
+  //       onError: (error) => {
+  //         console.error("메일 발송 실패:", error);
+  //         toast.error("메일 발송 중 오류가 발생했습니다.");
+  //       },
+  //     }
+  //   );
+  // };
+
+  // const handleCompleteEmailCode = async () => {
+  //   if (form.emailCode === "123456") {
+  //     setCodeError("");
+  //     toast.success("이메일 인증이 완료되었습니다", {
+  //       position: "bottom-center",
+  //       style: {
+  //         width: "100%",
+  //         backgroundColor: "#333",
+  //         color: "#fff",
+  //         fontSize: "16px",
+  //         marginBottom: "80px",
+  //       },
+  //     });
+
+  //     setTimeout(() => setStep(step + 1), 800);
+  //   } else {
+  //     setCodeError("인증번호가 올바르지 않습니다.");
+  //   }
+  // };
+
+  /////////////찐
+  const handleCompleteEmailCode = () => {
+    if (!form.email || !form.emailCode) {
+      setCodeError("이메일 또는 인증번호가 누락되었습니다.");
+      return;
     }
+
+    verifyCodeMutate(
+      { email: form.email, code: form.emailCode },
+      {
+        onSuccess: (data) => {
+          toast.success("이메일 인증이 완료되었습니다.", {
+            position: "bottom-center",
+            style: {
+              width: "100%",
+              backgroundColor: "#333",
+              color: "#fff",
+              fontSize: "16px",
+              marginBottom: "80px",
+            },
+          });
+          setCodeError("");
+          setTimeout(() => setStep(step + 1), 800);
+        },
+        onError: (error) => {
+          console.error("이메일 코드 검증 실패:", error);
+          setCodeError("인증번호가 올바르지 않습니다.");
+          toast.error("이메일 인증에 실패했습니다.");
+        },
+      }
+    );
   };
 
   return (
