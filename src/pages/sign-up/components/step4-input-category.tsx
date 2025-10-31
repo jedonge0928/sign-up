@@ -4,12 +4,12 @@ import { ISignUpForm } from "@/domains/auth/modals/auth.types";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { usePostSignUp } from "@/domains/auth/hook/usePostSignUp";
+import { usePostSignUp } from "@/app/sign-up/hook/useSignUpHook";
 
 export default function StepInputCategory() {
   const { step, setStep, form, setForm, reset } = useSignUpStore();
   const [isCategorySelect, setIsCategorySelect] = useState(false);
-  const mutation = usePostSignUp();
+  const { mutate } = usePostSignUp();
 
   const handleSignUp = () => {
     if (!form.email || !form.password || !form.name) {
@@ -17,7 +17,7 @@ export default function StepInputCategory() {
       return;
     }
 
-    mutation.mutate(form as ISignUpForm, {
+    mutate(form as ISignUpForm, {
       onSuccess: (data) => {
         console.log("회원가입 성공:", data);
         toast.success("회원가입이 완료되었습니다!");
@@ -46,6 +46,7 @@ export default function StepInputCategory() {
               joinCategory: e.target.value as ISignUpForm["joinCategory"],
             })
           }
+          multiple
         >
           <option value="" disabled>
             카테고리를 선택해주세요

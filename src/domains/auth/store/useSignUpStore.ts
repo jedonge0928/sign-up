@@ -11,7 +11,13 @@ interface SignUpStore {
   reset: () => void;
 }
 export const useSignUpStore = create<SignUpStore>((set) => ({
-  form: {},
+  form: {
+    email: "",
+    password: "",
+    name: "",
+    joinCategory: "",
+    wantCategory: "",
+  },
   step: 1,
   setForm: (data) => set((state) => ({ form: { ...state.form, ...data } })),
   setStep: (num) => set({ step: num }),

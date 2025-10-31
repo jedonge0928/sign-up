@@ -7,13 +7,6 @@ export interface ISignUpForm {
   birth: string;
   gender?: "남성" | "여성";
   adress: string;
-  joinCategory:
-    | "문화"
-    | "운동"
-    | "푸드"
-    | "게임"
-    | "여행"
-    | "예술"
-    | "자기 개발";
+  joinCategory: string;
   wantCategory: string;
 }
