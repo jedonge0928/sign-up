@@ -5,6 +5,7 @@ import {
   useVerifyEmailCode,
 } from "@/app/sign-up/hook/useSignUpHook";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
+import { TextField } from "@mui/material";
 import { useState } from "react";
 
 import toast from "react-hot-toast";
@@ -142,24 +143,59 @@ export default function Step1InputEmail() {
     );
   };
 
+  const inputStyle = {
+    input: { color: "white" },
+    label: { color: "gray" },
+    "& label.Mui-focused": {
+      color: "#ff5126",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "gray" },
+      "&:hover fieldset": { borderColor: "#FF5126" },
+      "&.Mui-focused fieldset": { borderColor: "#FF5126" },
+    },
+  };
+
   return (
     <>
       <div className="flex-1 space-y-3">
         <div className="text-white">
           <h2>이메일을 인증하세요</h2>
           <p>메일을 입력하면 메일이 발송 돼요</p>
-        </div>{" "}
-        <input
+        </div>
+        <div>
+          <TextField
+            fullWidth
+            label="email"
+            variant="outlined"
+            value={form.email || ""}
+            onChange={(e) => setForm({ email: e.target.value })}
+            sx={inputStyle}
+          />
+          {/* <input
           value={form.email || ""}
           onChange={(e) => setForm({ email: e.target.value })}
           type="text"
-          className={`border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white`}
+          className={`border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white `}
           placeholder="이메일을 입력해주세요"
-        />{" "}
-        {emailError && (
-          <p className="text-[#FF5126] text-sm mt-1">{emailError}</p>
-        )}
-        {isEmailCodeInput && (
+        />{" "} */}
+          {emailError && (
+            <p className="text-[#FF5126] text-sm mt-1">{emailError}</p>
+          )}{" "}
+        </div>
+
+        <div className="mt-5">
+          {isEmailCodeInput && (
+            <TextField
+              fullWidth
+              label="인증 번호 6자리를 입력해 주세요"
+              variant="outlined"
+              value={form.emailCode || ""}
+              onChange={(e) => setForm({ emailCode: e.target.value })}
+              sx={inputStyle}
+            />
+          )}
+          {/* {isEmailCodeInput && (
           <input
             value={form.emailCode || ""}
             onChange={(e) => setForm({ emailCode: e.target.value })}
@@ -167,10 +203,11 @@ export default function Step1InputEmail() {
             className="border w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
             placeholder="인증 번호 6자리를 입력해 주세요"
           />
-        )}
-        {codeError && (
-          <p className="text-[#FF5126] text-sm mt-1">{codeError}</p>
-        )}
+        )} */}
+          {codeError && (
+            <p className="text-[#FF5126] text-sm mt-1">{codeError}</p>
+          )}
+        </div>
       </div>
       <div>
         {!isEmailCodeInput && (
