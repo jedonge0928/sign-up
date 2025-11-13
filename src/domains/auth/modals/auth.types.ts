@@ -5,7 +5,7 @@ export interface ISignUpForm {
   password2: string;
   emailCode: string;
   birth: string;
-  gender?: "남성" | "여성";
+  gender?: "";
   adress: string;
   joinCategory: string;
   wantCategory: string;

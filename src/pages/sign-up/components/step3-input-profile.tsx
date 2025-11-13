@@ -2,6 +2,13 @@
 
 import AddressSearch from "@/app/components/AddressSearch";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 
 import toast from "react-hot-toast";
@@ -86,6 +93,19 @@ export default function StepInputProfile() {
     });
     setStep(step + 1);
   };
+
+  const inputStyle = {
+    input: { color: "white" },
+    label: { color: "gray" },
+    "& label.Mui-focused": {
+      color: "#ff5126",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "gray" },
+      "&:hover fieldset": { borderColor: "#FF5126" },
+      "&.Mui-focused fieldset": { borderColor: "#FF5126" },
+    },
+  };
   return (
     <>
       <div className="flex-1 space-y-3">
@@ -93,7 +113,22 @@ export default function StepInputProfile() {
           <h2>프로필 정보를 입력해주세요</h2>
           <p>생년월일 · 성별 · 주소를 입력해주세요</p>
         </div>
-        <input
+        <div>
+          <div className="mt-5">
+            <TextField
+              fullWidth
+              label="생년월일 (YYYYMMDD)"
+              variant="outlined"
+              value={form.birth || ""}
+              onChange={(e) => setForm({ birth: e.target.value })}
+              sx={inputStyle}
+            />
+            {birthError && (
+              <p className="text-[#FF5126] text-sm mt-1 ">{birthError}</p>
+            )}
+          </div>
+        </div>
+        {/* <input
           value={form.birth || ""}
           onChange={(e) => setForm({ birth: e.target.value })}
           type="text"
@@ -102,8 +137,24 @@ export default function StepInputProfile() {
         />
         {birthError && (
           <p className="text-[#FF5126] text-sm mt-1 ">{birthError}</p>
-        )}
-        {isGenderSelect && (
+        )} */}
+
+        <div>
+          {isGenderSelect && (
+            <FormControl fullWidth>
+              <InputLabel>성별</InputLabel>
+              <Select
+                value={form.gender || ""}
+                label="성별"
+                onChange={(e) => setForm({ gender: e.target.value })}
+              >
+                <MenuItem value="남성">남성</MenuItem>
+                <MenuItem value="여성">여성</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        </div>
+        {/* {isGenderSelect && (
           <select
             className="w-full border-white  bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
             value={form.gender}
@@ -117,7 +168,7 @@ export default function StepInputProfile() {
             <option value="남성">남성</option>
             <option value="여성">여성</option>
           </select>
-        )}
+        )} */}
 
         {isAdressInput && (
           <AddressSearch

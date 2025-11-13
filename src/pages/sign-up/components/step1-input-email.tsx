@@ -90,58 +90,58 @@ export default function Step1InputEmail() {
   //   );
   // };
 
-  // const handleCompleteEmailCode = async () => {
-  //   if (form.emailCode === "123456") {
-  //     setCodeError("");
-  //     toast.success("이메일 인증이 완료되었습니다", {
-  //       position: "bottom-center",
-  //       style: {
-  //         width: "100%",
-  //         backgroundColor: "#333",
-  //         color: "#fff",
-  //         fontSize: "16px",
-  //         marginBottom: "80px",
-  //       },
-  //     });
+  const handleCompleteEmailCode = async () => {
+    if (form.emailCode === "123456") {
+      setCodeError("");
+      toast.success("이메일 인증이 완료되었습니다", {
+        position: "bottom-center",
+        style: {
+          width: "100%",
+          backgroundColor: "#333",
+          color: "#fff",
+          fontSize: "16px",
+          marginBottom: "80px",
+        },
+      });
 
-  //     setTimeout(() => setStep(step + 1), 800);
-  //   } else {
-  //     setCodeError("인증번호가 올바르지 않습니다.");
-  //   }
-  // };
+      setTimeout(() => setStep(step + 1), 800);
+    } else {
+      setCodeError("인증번호가 올바르지 않습니다.");
+    }
+  };
 
   /////////////찐
-  const handleCompleteEmailCode = () => {
-    if (!form.email || !form.emailCode) {
-      setCodeError("이메일 또는 인증번호가 누락되었습니다.");
-      return;
-    }
+  // const handleCompleteEmailCode = () => {
+  //   if (!form.email || !form.emailCode) {
+  //     setCodeError("이메일 또는 인증번호가 누락되었습니다.");
+  //     return;
+  //   }
 
-    verifyCodeMutate(
-      { email: form.email, code: form.emailCode },
-      {
-        onSuccess: (data) => {
-          toast.success("이메일 인증이 완료되었습니다.", {
-            position: "bottom-center",
-            style: {
-              width: "100%",
-              backgroundColor: "#333",
-              color: "#fff",
-              fontSize: "16px",
-              marginBottom: "80px",
-            },
-          });
-          setCodeError("");
-          setTimeout(() => setStep(step + 1), 800);
-        },
-        onError: (error) => {
-          console.error("이메일 코드 검증 실패:", error);
-          setCodeError("인증번호가 올바르지 않습니다.");
-          toast.error("이메일 인증에 실패했습니다.");
-        },
-      }
-    );
-  };
+  //   verifyCodeMutate(
+  //     { email: form.email, code: form.emailCode },
+  //     {
+  //       onSuccess: (data) => {
+  //         toast.success("이메일 인증이 완료되었습니다.", {
+  //           position: "bottom-center",
+  //           style: {
+  //             width: "100%",
+  //             backgroundColor: "#333",
+  //             color: "#fff",
+  //             fontSize: "16px",
+  //             marginBottom: "80px",
+  //           },
+  //         });
+  //         setCodeError("");
+  //         setTimeout(() => setStep(step + 1), 800);
+  //       },
+  //       onError: (error) => {
+  //         console.error("이메일 코드 검증 실패:", error);
+  //         setCodeError("인증번호가 올바르지 않습니다.");
+  //         toast.error("이메일 인증에 실패했습니다.");
+  //       },
+  //     }
+  //   );
+  // };
 
   const inputStyle = {
     input: { color: "white" },
