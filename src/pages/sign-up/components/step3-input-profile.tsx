@@ -4,12 +4,14 @@ import AddressSearch from "@/app/components/AddressSearch";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import {
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import toast from "react-hot-toast";
 
@@ -21,6 +23,15 @@ export default function StepInputProfile() {
   const [isBirthInput, setIsBirthInput] = useState(false);
   const [isGenderSelect, setIsGenderSelect] = useState(false);
   const [isAdressInput, setIsAdressInput] = useState(false);
+  const [gender, setGender] = useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    //    setGender(event.target.value);
+    const value = event.target.value;
+    if (value === "남성" || value === "여성") {
+      setForm({ gender: value });
+    }
+  };
 
   //toastStyle
   const toastStyle = {
@@ -128,47 +139,27 @@ export default function StepInputProfile() {
             )}
           </div>
         </div>
-        {/* <input
-          value={form.birth || ""}
-          onChange={(e) => setForm({ birth: e.target.value })}
-          type="text"
-          placeholder="생년월일 (YYYYMMDD)"
-          className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-        />
-        {birthError && (
-          <p className="text-[#FF5126] text-sm mt-1 ">{birthError}</p>
-        )} */}
 
         <div>
           {isGenderSelect && (
-            <FormControl fullWidth>
-              <InputLabel>성별</InputLabel>
+            <FormControl sx={{ width: "100%", ...inputStyle }}>
+              <InputLabel id="demo-simple-select-helper-label">
+                gender
+              </InputLabel>
               <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
                 value={form.gender || ""}
-                label="성별"
-                onChange={(e) => setForm({ gender: e.target.value })}
+                label="gender"
+                onChange={handleChange}
+                sx={{ color: "white" }}
               >
-                <MenuItem value="남성">남성</MenuItem>
-                <MenuItem value="여성">여성</MenuItem>
+                <MenuItem value={"남성"}>남성</MenuItem>
+                <MenuItem value={"여성"}>여성</MenuItem>
               </Select>
             </FormControl>
           )}
         </div>
-        {/* {isGenderSelect && (
-          <select
-            className="w-full border-white  bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            value={form.gender}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === "남성" || value === "여성") {
-                setForm({ gender: value });
-              }
-            }}
-          >
-            <option value="남성">남성</option>
-            <option value="여성">여성</option>
-          </select>
-        )} */}
 
         {isAdressInput && (
           <AddressSearch

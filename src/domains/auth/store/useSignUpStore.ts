@@ -4,22 +4,29 @@ import { Dispatch, SetStateAction } from "react";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 
 interface SignUpStore {
-  form: Partial<ISignUpForm>;
+  form: ISignUpForm;
   step: number;
   setForm: (data: Partial<ISignUpForm>) => void;
   setStep: (num: number) => void;
   reset: () => void;
 }
+
+const initialForm: ISignUpForm = {
+  email: "",
+  name: "",
+  password: "",
+  password2: "",
+  emailCode: "",
+  birth: "",
+  gender: "",
+  adress: "",
+  joinCategory: [],
+  wantCategory: [],
+};
 export const useSignUpStore = create<SignUpStore>((set) => ({
-  form: {
-    email: "",
-    password: "",
-    name: "",
-    joinCategory: "",
-    wantCategory: "",
-  },
+  form: initialForm,
   step: 1,
   setForm: (data) => set((state) => ({ form: { ...state.form, ...data } })),
   setStep: (num) => set({ step: num }),
-  reset: () => set({ form: {}, step: 1 }),
+  reset: () => set({ form: initialForm, step: 1 }),
 }));
