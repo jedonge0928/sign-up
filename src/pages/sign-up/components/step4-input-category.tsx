@@ -3,8 +3,61 @@
 import { ISignUpForm } from "@/domains/auth/modals/auth.types";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import React, { useState } from "react";
 import { usePostSignUp } from "@/app/sign-up/hook/useSignUpHook";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from "@mui/material";
+
+const MenuProps = {
+  PaperProps: {
+    sx: {
+      bgcolor: "black",
+      color: "gray",
+      "& .MuiMenuItem-root": {
+        color: "gray",
+      },
+
+      "& .MuiMenuItem-root:hover": {
+        color: "white",
+        bgcolor: "#FF5126",
+      },
+      "& .Mui-selected": {
+        color: "white",
+        bgcolor: "#333 !important",
+        fontWeight: "bold",
+      },
+    },
+  },
+};
+
+const joinCategoryList = [
+  "문화",
+  "운동",
+  "푸드",
+  "게임",
+  "여행",
+  "예술",
+  "자기 개발",
+];
+
+const wantCategoryList = [
+  "연극",
+  "무용",
+  "복합",
+  "뮤지컬",
+  "관광지",
+  "레포츠",
+  "대중 무용",
+  "서양 음악",
+  "한국 음악",
+  "대중 음악",
+  "서커스/마술",
+];
 
 export default function StepInputCategory() {
   const { step, setStep, form, setForm, reset } = useSignUpStore();
@@ -16,7 +69,7 @@ export default function StepInputCategory() {
       toast.error("필수 정보가 누락되었습니다.");
       return;
     }
-
+    console.log("회원가입 요청 데이터:", form);
     mutate(form as ISignUpForm, {
       onSuccess: (data) => {
         console.log("회원가입 성공:", data);
@@ -31,6 +84,31 @@ export default function StepInputCategory() {
     });
   };
 
+  const inputStyle = {
+    input: { color: "white" },
+    label: { color: "gray" },
+    "& label.Mui-focused": {
+      color: "#ff5126",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "gray" },
+      "&:hover fieldset": { borderColor: "#FF5126" },
+      "&.Mui-focused fieldset": { borderColor: "#FF5126" },
+    },
+  };
+
+  const selectInputStyle = {
+    color: "white",
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "gray",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#FF5126",
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#FF5126",
+    },
+  };
   return (
     <>
       <div className="flex-1 space-y-3">
@@ -38,49 +116,73 @@ export default function StepInputCategory() {
           <h2>카테고리를 선택해 주세요</h2>
           <p>취향에 알맞는 컨텐츠를 추천해 드려요</p>
         </div>
-        <select
-          className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-          value={form.joinCategory || ""}
-          onChange={(e) =>
-            setForm({
-              joinCategory: e.target.value as ISignUpForm["joinCategory"],
-            })
-          }
-          multiple
-        >
-          <option value="" disabled>
-            카테고리를 선택해주세요
-          </option>
-          <option value="문화">문화</option>
-          <option value="운동">운동</option>
-          <option value="푸드">푸드</option>
-          <option value="게임">게임</option>
-          <option value="여행">여행</option>
-          <option value="예술">예술</option>
-          <option value="자기 개발">자기 개발</option>
-        </select>
+        <div>
+          <FormControl sx={{ width: "100%", ...inputStyle }}>
+            <InputLabel id="join-category-label">카테고리</InputLabel>
+
+            <Select
+              labelId="join-category-label"
+              id="join-category"
+              multiple
+              value={form.joinCategory || []}
+              onChange={(e) => {
+                const value = e.target.value;
+                const selected =
+                  typeof value === "string" ? value.split(",") : value;
+
+                if (selected.length > 3) {
+                  toast.error("최대 3개까지만 선택 가능합니다.");
+                  console.log("지금 선택한 값:", selected);
+                  return;
+                }
+
+                setForm({ joinCategory: selected });
+              }}
+              input={<OutlinedInput label="카테고리" />}
+              MenuProps={MenuProps}
+              sx={{ color: "white" }}
+            >
+              {joinCategoryList.map((category, index) => (
+                <MenuItem key={index} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
         {isCategorySelect && (
-          <select
-            className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
-            value={form.wantCategory || ""}
-            onChange={(e) => setForm({ wantCategory: e.target.value })}
-          >
-            <option value="" disabled>
-              컨텐츠 카테고리를 선택해 주세요
-            </option>
-            <option value="연극">연극</option>
-            <option value="무용">무용</option>
-            <option value="복합">복합</option>
-            <option value="뮤지컬">뮤지컬</option>
-            <option value="관광지">관광지</option>
-            <option value="레포츠">레포츠</option>
-            <option value="대중 무용">대중 무용</option>
-            <option value="서양 음악">서양 음악</option>
-            <option value="한국 음악">한국 음악</option>
-            <option value="대중 음악">대중 음악</option>
-            <option value="서커스/마술">서커스/마술</option>
-          </select>
+          <FormControl sx={{ width: "100%", ...inputStyle, mt: 3 }}>
+            <InputLabel id="want-category-label">관심 카테고리</InputLabel>
+
+            <Select
+              labelId="want-category-label"
+              id="want-category"
+              multiple
+              value={form.wantCategory || []}
+              onChange={(e) => {
+                const value = e.target.value;
+                const selected =
+                  typeof value === "string" ? value.split(",") : value;
+
+                if (selected.length > 3) {
+                  toast.error("최대 3개까지만 선택 가능합니다.");
+                  console.log("지금 선택한 값:", selected);
+                  return;
+                }
+                setForm({ wantCategory: selected });
+              }}
+              input={<OutlinedInput label="관심 카테고리" />}
+              MenuProps={MenuProps}
+              sx={{ color: "white" }}
+            >
+              {wantCategoryList.map((category, index) => (
+                <MenuItem key={index} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         )}
       </div>
 
@@ -88,9 +190,9 @@ export default function StepInputCategory() {
         {!isCategorySelect && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              form.joinCategory ? "bg-[#FF5126]" : "bg-gray-600"
+              form.joinCategory?.length > 0 ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!form.joinCategory}
+            disabled={form.joinCategory.length === 0}
             onClick={() => setIsCategorySelect(true)}
           >
             다음
@@ -100,9 +202,9 @@ export default function StepInputCategory() {
         {isCategorySelect && (
           <button
             className={`text-white w-full py-4 rounded-md ${
-              form.wantCategory ? "bg-[#FF5126]" : "bg-gray-600"
+              form.wantCategory.length > 0 ? "bg-[#FF5126]" : "bg-gray-600"
             }`}
-            disabled={!form.wantCategory}
+            disabled={form.wantCategory.length === 0}
             onClick={handleSignUp}
           >
             회원가입 완료

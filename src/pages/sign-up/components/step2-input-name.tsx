@@ -25,7 +25,7 @@ export default function Step1InputName() {
   const [isPasswordInput, setIsPasswordInput] = useState(false);
   const [isPasswordInput2, setIsPasswordInput2] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const toastStyle = {
     width: "100%",
     backgroundColor: "#333",
@@ -128,8 +128,6 @@ export default function Step1InputName() {
       "&.Mui-focused fieldset": { borderColor: "#FF5126" },
     },
   };
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
