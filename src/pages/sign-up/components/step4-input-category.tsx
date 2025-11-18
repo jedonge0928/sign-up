@@ -5,59 +5,11 @@ import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import toast from "react-hot-toast";
 import React, { useState } from "react";
 import { usePostSignUp } from "@/app/sign-up/hook/useSignUpHook";
+import SignUpMultiSelect from "@/app/views/component/SignUpMultiSelect";
 import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-} from "@mui/material";
-
-const MenuProps = {
-  PaperProps: {
-    sx: {
-      bgcolor: "black",
-      color: "gray",
-      "& .MuiMenuItem-root": {
-        color: "gray",
-      },
-
-      "& .MuiMenuItem-root:hover": {
-        color: "white",
-        bgcolor: "#FF5126",
-      },
-      "& .Mui-selected": {
-        color: "white",
-        bgcolor: "#333 !important",
-        fontWeight: "bold",
-      },
-    },
-  },
-};
-
-const joinCategoryList = [
-  "문화",
-  "운동",
-  "푸드",
-  "게임",
-  "여행",
-  "예술",
-  "자기 개발",
-];
-
-const wantCategoryList = [
-  "연극",
-  "무용",
-  "복합",
-  "뮤지컬",
-  "관광지",
-  "레포츠",
-  "대중 무용",
-  "서양 음악",
-  "한국 음악",
-  "대중 음악",
-  "서커스/마술",
-];
+  joinCategoryList,
+  wantCategoryList,
+} from "@/app/views/component/data/categoryList";
 
 export default function StepInputCategory() {
   const { step, setStep, form, setForm, reset } = useSignUpStore();
@@ -97,18 +49,6 @@ export default function StepInputCategory() {
     },
   };
 
-  const selectInputStyle = {
-    color: "white",
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "gray",
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#FF5126",
-    },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#FF5126",
-    },
-  };
   return (
     <>
       <div className="flex-1 space-y-3">
@@ -117,7 +57,14 @@ export default function StepInputCategory() {
           <p>취향에 알맞는 컨텐츠를 추천해 드려요</p>
         </div>
         <div>
-          <FormControl sx={{ width: "100%", ...inputStyle }}>
+          <SignUpMultiSelect
+            label="카테고리"
+            value={form.joinCategory || []}
+            options={joinCategoryList}
+            onChange={(selected) => setForm({ joinCategory: selected })}
+            inputStyle={inputStyle}
+          />
+          {/* <FormControl sx={{ width: "100%", ...inputStyle }}>
             <InputLabel id="join-category-label">카테고리</InputLabel>
 
             <Select
@@ -148,10 +95,18 @@ export default function StepInputCategory() {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
         </div>
-
         {isCategorySelect && (
+          <SignUpMultiSelect
+            label="관심 카테고리"
+            value={form.wantCategory || []}
+            options={wantCategoryList}
+            onChange={(selected) => setForm({ wantCategory: selected })}
+            inputStyle={inputStyle}
+          />
+        )}
+        {/* {isCategorySelect && (
           <FormControl sx={{ width: "100%", ...inputStyle, mt: 3 }}>
             <InputLabel id="want-category-label">관심 카테고리</InputLabel>
 
@@ -183,7 +138,7 @@ export default function StepInputCategory() {
               ))}
             </Select>
           </FormControl>
-        )}
+        )} */}
       </div>
 
       <div className="mt-4 space-y-2">
@@ -214,3 +169,24 @@ export default function StepInputCategory() {
     </>
   );
 }
+// const MenuProps = {
+//   PaperProps: {
+//     sx: {
+//       bgcolor: "gr",
+//       color: "gray",
+//       "& .MuiMenuItem-root": {
+//         color: "gray",
+//       },
+
+//       "& .MuiMenuItem-root:hover": {
+//         color: "white",
+//         bgcolor: "#FF5126",
+//       },
+//       "& .Mui-selected": {
+//         color: "white",
+//         bgcolor: "#333 !important",
+//         fontWeight: "bold",
+//       },
+//     },
+//   },
+// };

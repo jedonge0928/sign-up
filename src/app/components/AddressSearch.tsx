@@ -10,14 +10,13 @@ declare global {
 }
 
 interface AddressSearchProps {
-  value?: string; // 외부에서 현재 주소 전달
-  onSelect: (address: string) => void; // 선택된 주소를 부모에 전달
+  value?: string;
+  onSelect: (address: string) => void;
 }
 
 export default function AddressSearch({ value, onSelect }: AddressSearchProps) {
   const [error, setError] = useState("");
 
-  // ✅ 외부 스크립트 로드
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -26,7 +25,6 @@ export default function AddressSearch({ value, onSelect }: AddressSearchProps) {
     document.body.appendChild(script);
   }, []);
 
-  // ✅ toast 스타일
   const toastStyle = {
     width: "100%",
     backgroundColor: "#333",
@@ -35,7 +33,6 @@ export default function AddressSearch({ value, onSelect }: AddressSearchProps) {
     marginBottom: "80px",
   };
 
-  // ✅ 주소검색 실행
   const handleClickAddressSearch = () => {
     if (!window.daum || !window.daum.Postcode) {
       toast.error("주소검색 모듈이 아직 로드되지 않았습니다.", {
@@ -52,7 +49,7 @@ export default function AddressSearch({ value, onSelect }: AddressSearchProps) {
 
         if (region !== "서울") {
           setError("서울 이외의 지역은 선택할 수 없습니다.");
-          onSelect(""); // 부모 상태 초기화
+          onSelect("");
           toast.error("서울 지역만 선택 가능합니다.", {
             position: "bottom-center",
             style: toastStyle,

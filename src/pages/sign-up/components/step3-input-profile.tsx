@@ -1,6 +1,8 @@
 "use client";
 
 import AddressSearch from "@/app/components/AddressSearch";
+import SignUpInput from "@/app/views/component/SignUpinput";
+import SignUpSelect from "@/app/views/component/SignUpSelect";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import {
   FormControl,
@@ -126,7 +128,13 @@ export default function StepInputProfile() {
         </div>
         <div>
           <div className="mt-5">
-            <TextField
+            <SignUpInput
+              label="생년월일 (YYYYMMDD)"
+              value={form.birth || ""}
+              onChange={(v) => setForm({ birth: v })}
+              error={birthError}
+            />
+            {/* <TextField
               fullWidth
               label="생년월일 (YYYYMMDD)"
               variant="outlined"
@@ -136,12 +144,20 @@ export default function StepInputProfile() {
             />
             {birthError && (
               <p className="text-[#FF5126] text-sm mt-1 ">{birthError}</p>
-            )}
+            )} */}
           </div>
         </div>
 
         <div>
           {isGenderSelect && (
+            <SignUpSelect
+              label="gender"
+              value={form.gender || ""}
+              options={["남성", "여성"]}
+              onChange={(v) => setForm({ gender: v })}
+            />
+          )}
+          {/* {isGenderSelect && (
             <FormControl sx={{ width: "100%", ...inputStyle }}>
               <InputLabel id="demo-simple-select-helper-label">
                 gender
@@ -158,7 +174,7 @@ export default function StepInputProfile() {
                 <MenuItem value={"여성"}>여성</MenuItem>
               </Select>
             </FormControl>
-          )}
+          )} */}
         </div>
 
         {isAdressInput && (
