@@ -33,7 +33,7 @@ export default function SignUpForm() {
         {isPending ? "가입 중..." : "회원가입"}
       </button>
 
-      {isSuccess && <p className="text-green-500">🎉 가입이 완료되었습니다!</p>}
+      {isSuccess && <p className="text-green-500">가입이 완료되었습니다!</p>}
     </div>
   );
 }

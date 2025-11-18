@@ -1,5 +1,7 @@
 "use client";
 
+import SignUpPasswordInput from "@/app/views/component/PasswordInput";
+import SignUpInput from "@/app/views/component/SignUpinput";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -116,18 +118,6 @@ export default function Step1InputName() {
       setPasswordMatch("비밀번호가 일치하지 않습니다.");
     }
   };
-  const inputStyle = {
-    input: { color: "white" },
-    label: { color: "gray" },
-    "& label.Mui-focused": {
-      color: "#ff5126",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": { borderColor: "gray" },
-      "&:hover fieldset": { borderColor: "#FF5126" },
-      "&.Mui-focused fieldset": { borderColor: "#FF5126" },
-    },
-  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -157,19 +147,33 @@ export default function Step1InputName() {
           placeholder="소문자·한글·숫자로만 구성된 8자 이내로 입력"
         /> */}
         <div className="mt-5">
-          <TextField
+          <SignUpInput
+            label="소문자·한글·숫자로만 구성된 8자 이내"
+            value={form.name || ""}
+            onChange={(v) => setForm({ name: v })}
+            error={nicknameError}
+          />
+          {/* <TextField
             fullWidth
             label="소문자·한글·숫자로만 구성된 8자 이내로 입력"
             variant="outlined"
             value={form.name || ""}
             onChange={(e) => setForm({ name: e.target.value })}
             sx={inputStyle}
-          />
+          /> */}
           {nicknameError && (
             <p className="text-[#FF5126] text-sm mt-1">{nicknameError}</p>
           )}
         </div>
         <div className="mt-5">
+          {isPasswordInput && (
+            <SignUpPasswordInput
+              label="비밀번호"
+              value={form.password || ""}
+              onChange={(v) => setForm({ password: v })}
+              error={passwordError}
+            />
+          )}
           {/* {isPasswordInput && (
             <input
               value={form.password || ""}
@@ -178,7 +182,7 @@ export default function Step1InputName() {
               className=" w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
             />
           )} */}{" "}
-          {isPasswordInput && (
+          {/* {isPasswordInput && (
             <FormControl
               sx={{ width: "100%", ...inputStyle }}
               variant="outlined"
@@ -207,7 +211,7 @@ export default function Step1InputName() {
                 label="비밀번호"
               />
             </FormControl>
-          )}
+          )} */}
           {/* {isPasswordInput && (
             <TextField
               fullWidth
@@ -225,6 +229,14 @@ export default function Step1InputName() {
         </div>
         <div>
           {isPasswordInput2 && (
+            <SignUpPasswordInput
+              label="비밀번호 확인"
+              value={form.password2 || ""}
+              onChange={(v) => setForm({ password2: v })}
+              error={passwordMatch}
+            />
+          )}
+          {/* {isPasswordInput2 && (
             <FormControl
               sx={{ width: "100%", ...inputStyle }}
               variant="outlined"
@@ -253,7 +265,7 @@ export default function Step1InputName() {
                 label="비밀번호"
               />
             </FormControl>
-          )}
+          )} */}
         </div>
         {/* {isPasswordInput2 && (
           <TextField
@@ -273,11 +285,6 @@ export default function Step1InputName() {
             className="w-full border-white bg-gray-600 px-2 py-5 rounded-md text-xl text-white"
           />
         )} */}
-        {passwordMatch && (
-          <p className="text-[#FF5126] text-sm mt-1">
-            확인한 비밀번호가 일치하지 않습니다.
-          </p>
-        )}
       </div>
 
       <div>

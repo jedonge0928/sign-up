@@ -4,8 +4,8 @@ import {
   usePostEmailCode,
   useVerifyEmailCode,
 } from "@/app/sign-up/hook/useSignUpHook";
+import SignUpInput from "@/app/views/component/SignUpinput";
 import { useSignUpStore } from "@/domains/auth/store/useSignUpStore";
-import { TextField } from "@mui/material";
 import { useState } from "react";
 
 import toast from "react-hot-toast";
@@ -143,19 +143,6 @@ export default function Step1InputEmail() {
   //   );
   // };
 
-  const inputStyle = {
-    input: { color: "white" },
-    label: { color: "gray" },
-    "& label.Mui-focused": {
-      color: "#ff5126",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": { borderColor: "gray" },
-      "&:hover fieldset": { borderColor: "#FF5126" },
-      "&.Mui-focused fieldset": { borderColor: "#FF5126" },
-    },
-  };
-
   return (
     <>
       <div className="flex-1 space-y-3">
@@ -164,13 +151,11 @@ export default function Step1InputEmail() {
           <p>메일을 입력하면 메일이 발송 돼요</p>
         </div>
         <div>
-          <TextField
-            fullWidth
+          <SignUpInput
             label="email"
-            variant="outlined"
             value={form.email || ""}
-            onChange={(e) => setForm({ email: e.target.value })}
-            sx={inputStyle}
+            onChange={(v) => setForm({ email: v })}
+            error={emailError}
           />
           {/* <input
           value={form.email || ""}
@@ -186,6 +171,14 @@ export default function Step1InputEmail() {
 
         <div className="mt-5">
           {isEmailCodeInput && (
+            <SignUpInput
+              label="인증 번호 6자리를 입력해 주세요"
+              value={form.emailCode || ""}
+              onChange={(v) => setForm({ emailCode: v })}
+              error={codeError}
+            />
+          )}
+          {/* {isEmailCodeInput && (
             <TextField
               fullWidth
               label="인증 번호 6자리를 입력해 주세요"
@@ -194,7 +187,7 @@ export default function Step1InputEmail() {
               onChange={(e) => setForm({ emailCode: e.target.value })}
               sx={inputStyle}
             />
-          )}
+          )} */}
           {/* {isEmailCodeInput && (
           <input
             value={form.emailCode || ""}
