@@ -1,5 +1,6 @@
 "use client";
 
+import { SignUpMultiSelectProps } from "@/app/types/sign-up/signUp-input-types";
 import {
   FormControl,
   InputLabel,
@@ -8,7 +9,6 @@ import {
   Select,
 } from "@mui/material";
 import toast from "react-hot-toast";
-import { SignUpMultiSelectProps } from "./types/signUp-input-types";
 
 // interface SignUpMultiSelectProps {
 //   label: string;

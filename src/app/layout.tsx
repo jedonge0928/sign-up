@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../assets/styles/globals.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import QueryProvider from "@/shared/components/query-provider";
 import { Toaster } from "react-hot-toast";
 import { MantineProvider } from "@mantine/core";
+import Header from "./components/common/header/Header";
+import Footer from "./components/common/footer/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +31,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} mx-auto max-w-[750px] antialiased`}
       >
         <QueryProvider>
-          <MantineProvider>{children} </MantineProvider>
+          <MantineProvider>
+            <Header />
+            {children} <Footer />
+          </MantineProvider>
         </QueryProvider>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>

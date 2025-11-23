@@ -1,10 +1,10 @@
 "use client";
 
 interface StepProgressBarProps {
-  step: number; // 현재 스텝
-  total: number; // 전체 스텝 수
-  activeColor?: string; // 활성화 색
-  inactiveColor?: string; // 비활성화 색
+  step: number;
+  total: number; 
+  activeColor?: string; 
+  inactiveColor?: string; 
 }
 
 export default function StepProgressBar({

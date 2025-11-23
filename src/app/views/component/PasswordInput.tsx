@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
-import { PassWordInputProps } from "./types/signUp-input-types";
+import { PassWordInputProps } from "@/app/types/sign-up/signUp-input-types";
 
 export default function SignUpPasswordInput({
   label,

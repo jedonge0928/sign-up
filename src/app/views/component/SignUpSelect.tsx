@@ -1,7 +1,7 @@
 "use client";
 
+import { SelectInputProps } from "@/app/types/sign-up/signUp-input-types";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { SelectInputProps } from "./types/signUp-input-types";
 
 export default function SignUpSelect({
   label,
