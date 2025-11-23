@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@import './colors.css';
+
+html,
+body {
+  background-color: var(--color-bg-main);
+  cursor: default;
+}
+
+button {
+  cursor: pointer;
+}

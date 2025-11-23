@@ -1,7 +1,7 @@
 "use client";
 
+import { SignUpInputProps } from "@/app/types/sign-up/signUp-input-types";
 import { TextField } from "@mui/material";
-import { SignUpInputProps } from "./types/signUp-input-types";
 
 export default function SignUpInput({
   label,
